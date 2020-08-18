@@ -1,0 +1,2 @@
+# payid-cli
+PayID CLI
