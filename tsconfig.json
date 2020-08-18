@@ -1,0 +1,30 @@
+{
+  "include": ["src/**/*.ts"],
+  "compileOnSave": true,
+  "compilerOptions": {
+    // Basic Options
+    "project": ".",
+    "outDir": "./dist",
+    "target": "es2019",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "incremental": true,
+    // Add support for custom typings
+    "baseUrl": "./",
+    "paths": {
+      "*": ["@types/*"]
+    },
+    // Source Maps & Declaration Files
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    // Strict Mode
+    "strict": true,
+    // Checks not in "strict" mode
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
