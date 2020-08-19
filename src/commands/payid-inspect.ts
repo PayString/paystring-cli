@@ -29,18 +29,21 @@ export default class InspectPayIdCommand extends Command {
    * @override
    */
   protected command(): string {
-    return 'inspect'
+    return 'inspect [payId]'
   }
 
   /**
    * @override
    */
   protected description(): string {
-    return 'Inspect signatures on the loaded PayID'
+    return 'Inspect signatures on the loaded PayID or from an optionally specified PayID'
   }
 
-  protected async action(): Promise<void> {
-    const info = this.getPaymentInfo()
+  /**
+   * @override
+   */
+  protected async action(args: Vorpal.Args): Promise<void> {
+    const info = await this.payIdFromArgsOrLocalStorage(args)
     const result = this.paymentInformationInspector.inspect(info)
     this.vorpal.log(`${info.payId} ${validString(result.isVerified)}`)
     result.verifiedAddressesResults.forEach((addressResult) => {

@@ -3,6 +3,7 @@ import {
   PaymentInformation,
   verifyPayId,
 } from '@payid-org/utils'
+import * as Vorpal from 'vorpal'
 
 import Command from './Command'
 
@@ -10,13 +11,15 @@ import Command from './Command'
  * Verifies the signatures and certs for verified addresses of the currently loaded PayID.
  */
 export default class VerifyPayIdCommand extends Command {
-  protected async action(): Promise<void> {
-    const info = this.getPaymentInfo()
+  /**
+   * @override
+   */
+  protected async action(args: Vorpal.Args): Promise<void> {
+    const info = await this.payIdFromArgsOrLocalStorage(args)
     if (verifyPayId(info)) {
       const addresses = info.verifiedAddresses.map((address) => {
         return convertJsonToAddress(address.payload)
       })
-
       const copy: PaymentInformation = {
         payId: info.payId,
         addresses,
@@ -33,13 +36,13 @@ export default class VerifyPayIdCommand extends Command {
    * @override
    */
   protected command(): string {
-    return 'verify'
+    return 'verify [payId]'
   }
 
   /**
    * @override
    */
   protected description(): string {
-    return 'Verify the loaded PayID'
+    return 'Verify the loaded PayID or an optionally specified PayID'
   }
 }

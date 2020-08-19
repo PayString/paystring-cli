@@ -11,7 +11,7 @@ export default class PayIdToUrlCommand extends Command {
    * @override
    */
   protected async action(args: Vorpal.Args): Promise<void> {
-    const url = convertPayIdToUrl(args.payid).href
+    const url = convertPayIdToUrl(args.payId).href
     this.vorpal.log(url)
   }
 
@@ -19,7 +19,7 @@ export default class PayIdToUrlCommand extends Command {
    * @override
    */
   protected command(): string {
-    return 'to-url <payid>'
+    return 'to-url <payId>'
   }
 
   /**

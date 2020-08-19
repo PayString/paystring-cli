@@ -1,8 +1,6 @@
-import { convertPayIdToUrl, PaymentInformation } from '@payid-org/utils'
-import axios, { AxiosResponse } from 'axios'
 import * as Vorpal from 'vorpal'
 
-import Command from './Command'
+import Command, { loadPayId } from './Command'
 
 /**
  * Loads a PayID from the remote server. For example, "load test$xpring.money" will
@@ -15,40 +13,17 @@ export default class LoadPayIdCommand extends Command {
    * @override
    */
   protected async action(args: Vorpal.Args): Promise<void> {
-    const { payid } = args
-    const url = convertPayIdToUrl(payid).href
-    await axios
-      .get(url, {
-        headers: {
-          'payid-version': '1.0',
-          accept: 'application/payid+json',
-        },
-      })
-      .then((response) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- axios response.data has an any type
-        const info: PaymentInformation = response.data
-        this.localStorage.setPaymentInfo(info)
-        this.logPaymentInfo(info)
-      })
-      .catch((error) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- axios error has an any type
-        const {
-          response,
-          message,
-        }: { response?: AxiosResponse; message: string } = error
-        if (response) {
-          this.vorpal.log(`Received HTTP status ${response.status} on ${url}`)
-          return
-        }
-        this.vorpal.log(`Bad request ${url}. Error: ${message}.`)
-      })
+    const { payId } = args
+    const info = await loadPayId(payId)
+    this.localStorage.setPaymentInfo(info)
+    this.logPaymentInfo(info)
   }
 
   /**
    * @override
    */
   protected command(): string {
-    return 'load <payid>'
+    return 'load <payId>'
   }
 
   /**

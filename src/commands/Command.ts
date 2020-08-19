@@ -1,4 +1,5 @@
-import { PaymentInformation } from '@payid-org/utils'
+import { convertPayIdToUrl, PaymentInformation } from '@payid-org/utils'
+import axios, { AxiosResponse } from 'axios'
 import * as Vorpal from 'vorpal'
 import { Args } from 'vorpal'
 
@@ -34,13 +35,11 @@ abstract class Command {
     // Execute the concrete action inside a try/catch wrapper
     this.vorpal.command(this.command(), this.description()).action(
       async (args: Args): Promise<void> => {
-        try {
-          await this.action(args)
-        } catch (error) {
+        await this.action(args).catch((error) => {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- error has any type
           const { message } = error
           this.vorpal.log(message)
-        }
+        })
       },
     )
   }
@@ -72,6 +71,23 @@ abstract class Command {
   }
 
   /**
+   * Retrieves a PayID using the optional payId argument or else returns the PaymentInformation
+   * currently loaded in local storage.
+   *
+   * @param args - The vorpal args object.
+   * @returns PaymentInformation from args or local storage. Or error if can't be loaded.
+   */
+  protected async payIdFromArgsOrLocalStorage(
+    args: Args,
+  ): Promise<PaymentInformation> {
+    const { payId } = args
+    if (payId) {
+      return loadPayId(payId)
+    }
+    return this.getPaymentInfo()
+  }
+
+  /**
    * The vorpal command.
    *
    * @returns The vorpal command.
@@ -91,6 +107,39 @@ abstract class Command {
    * @param args - Arguments provided by user from command line.
    */
   protected abstract async action(args: Args): Promise<void>
+}
+
+/**
+ * Loads a PayID from a remote server.
+ *
+ * @param payId - The PayID to lookup.
+ * @returns A promise that resolves to the PaymentInformation for the PayID.
+ */
+export async function loadPayId(payId: string): Promise<PaymentInformation> {
+  const url = convertPayIdToUrl(payId).href
+  return axios
+    .get(url, {
+      headers: {
+        'payid-version': '1.0',
+        accept: 'application/payid+json',
+      },
+    })
+    .then((response) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- axios response.data has an any type
+      const info: PaymentInformation = response.data
+      return info
+    })
+    .catch((error) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- axios error has an any type
+      const {
+        response,
+        message,
+      }: { response?: AxiosResponse; message: string } = error
+      if (response) {
+        throw new Error(`Received HTTP status ${response.status} on ${url}`)
+      }
+      throw new Error(`Bad request ${url}. Error: ${message}.`)
+    })
 }
 
 export default Command
