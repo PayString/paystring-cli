@@ -24,7 +24,7 @@
     "build": "rm -rf dist && tsc --project .",
     "lint": "eslint . --ext .ts --fix --max-warnings 0 && prettier --write '**/*.{md,json}'",
     "lintNoFix": "eslint . --ext .ts --max-warnings 0 && prettier --check '**/*.{md,json}'",
-    "resolve-audit": "npx npm-force-resolutions && npm audit",
+    "preinstall": "npm install --package-lock-only --ignore-scripts --no-audit && npx npm-force-resolutions",
     "test": "nyc mocha 'test/**/*.test.ts'"
   },
   "dependencies": {
