@@ -6,7 +6,7 @@ pre-push:
   commands:
     packages-audit:
       tags: security
-      run: npm run resolve-audit
+      run: npm audit
     eslint:
       tags: style
       run: npm run lintNoFix
