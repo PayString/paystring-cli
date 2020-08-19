@@ -21,14 +21,14 @@
     "dist/*"
   ],
   "scripts": {
-    "presinstall": "npx npm-force-resolutions",
+    "preinstall": "npx npm-force-resolutions",
     "build": "rm -rf dist && tsc --project .",
     "lint": "eslint . --ext .ts --fix --max-warnings 0 && prettier --write '**/*.{md,json}'",
     "lintNoFix": "eslint . --ext .ts --max-warnings 0 && prettier --check '**/*.{md,json}'",
     "test": "nyc mocha 'test/**/*.test.ts'"
   },
   "dependencies": {
-    "@payid-org/utils": "git+https://github.com/payid-org/utils.git#nh/extract-cli",
+    "@payid-org/utils": "^1.2.0",
     "axios": "^0.19.2",
     "beautify-json": "^1.0.1",
     "jose": "^1.27.3",
