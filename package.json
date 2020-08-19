@@ -1,6 +1,6 @@
 {
   "name": "@payid-org/payid-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI for PayID",
   "homepage": "https://github.com/payid-org/payid-cli#readme",
   "bugs": {
@@ -21,10 +21,10 @@
     "dist/*"
   ],
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
     "build": "rm -rf dist && tsc --project .",
     "lint": "eslint . --ext .ts --fix --max-warnings 0 && prettier --write '**/*.{md,json}'",
     "lintNoFix": "eslint . --ext .ts --max-warnings 0 && prettier --check '**/*.{md,json}'",
+    "resolve-audit": "npx npm-force-resolutions && npm audit",
     "test": "nyc mocha 'test/**/*.test.ts'"
   },
   "dependencies": {
@@ -71,6 +71,6 @@
     "yarn": "please use npm"
   },
   "resolutions": {
-    "lodash": "^4.17.19"
+    "lodash": "^4.17.20"
   }
 }
