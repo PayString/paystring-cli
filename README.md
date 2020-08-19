@@ -21,10 +21,11 @@ To install the PayID CLI, run the command:
 npm install -g @payid-org/payid-cli
 ```
 
-This will install the CLI as a global npm module and link it as a `payid` executable 
+This will install the CLI as a global npm module and link it as a `payid` executable
 (typically under /usr/local/bin/payid).
 
 Alternatively, install and run via Docker:
+
 ```
 docker run xpring/payid-cli
 ```
