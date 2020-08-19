@@ -10,12 +10,23 @@ Based on the Typescript PayID [Utils](https://github.com/payid-org/utils) librar
 In order to use the CLI, both [node](https://nodejs.org/en/download/) and
 [npm](https://docs.npmjs.com/downloading-and-installing-packages-locally) must be installed first.
 
+Alternatively, the CLI can be run as a Docker container, though commands that store information
+locally will only persist for the duration of the container.
+
 ## Installation
 
 To install the PayID CLI, run the command:
 
 ```
 npm install -g @payid-org/payid-cli
+```
+
+This will install the CLI as a global npm module and link it as a `payid` executable 
+(typically under /usr/local/bin/payid).
+
+Alternatively, install and run via Docker:
+```
+docker run xpring/payid-cli
 ```
 
 ## Interactive vs single command mode
