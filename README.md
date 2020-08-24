@@ -2,26 +2,25 @@
 
 ![NPM version badge](https://img.shields.io/npm/v/@payid-org/payid-cli)
 
-Command-line interface for creating, fetching, signing and verifying PayIDs.
+Command-line interface to create, fetch, sign, and verify PayIDs.
 Based on the Typescript PayID [Utils](https://github.com/payid-org/utils) library.
 
 ## Prerequisites
 
-In order to use the CLI, both [node](https://nodejs.org/en/download/) and
-[npm](https://docs.npmjs.com/downloading-and-installing-packages-locally) must be installed first.
+Before you install PayID CLI locally, ensure that both [node](https://nodejs.org/en/download/) and
+[npm](https://docs.npmjs.com/downloading-and-installing-packages-locally) are installed locally.
 
-Alternatively, the CLI can be run as a Docker container, though commands that store information
-locally will only persist for the duration of the container.
+You can also run PayID CLI as a Docker container. If you run commands that cause information to be stored locally, that information only persists for the duration of the container.
 
 ## Installation
 
-To install the PayID CLI, run the command:
+To install PayID CLI, run the command:
 
 ```
 npm install -g @payid-org/payid-cli
 ```
 
-This will install the CLI as a global npm module and link it as a `payid` executable
+This command installs PayID CLI as a global npm module and links it as a `payid` executable
 (typically under /usr/local/bin/payid).
 
 Alternatively, install and run via Docker:
@@ -30,32 +29,36 @@ Alternatively, install and run via Docker:
 docker run xpring/payid-cli
 ```
 
-## Interactive vs single command mode
+## Interactive vs. single command mode
 
-CLI can be run in interactive mode or non-interactive (single command) mode.
-In interactive mode, a prompt is shown where multiple commands can be run until the `exit` command is run.
-Interactive mode retains a history of commands run which can be accessed using the up arrow key. Command completion
-is available using the tab key.
+You can run PayID CLI in either interactive mode or non-interactive (single command) mode.
+In interactive mode, a prompt is displayed, and you can run multiple commands from this prompt. Run the `exit` command to leave interactive mode.
 
-In non-interactive mode, a single command is run (based on supplied command line arguments) and then the CLI exits.
-No prompt is shown in this mode. This mode is useful for running commands from a script as well as chaining the results
+Interactive mode retains a history of executed commands that you can access by with the up arrow key. Use the <Tab> key for command completion.
+    
+In non-interactive mode, you run a single command, based on supplied command line arguments, and then the CLI exits.
+No prompt is displayed in this mode. Non-interactive mode is useful for running commands from a script, or to chain the results
 of multiple commands together.
 
-To run the CLI in interactive mode, run `payid`.
+To run the CLI in interactive mode, run `payid`. You can now enter `<command> arguments` for each command you want to run. 
 
-To run the CLI in non-interactive, run `payid <command> <arguments>`. Examples:
+To run the CLI in non-interactive mode, run `payid <command> <arguments>`. 
+
+Examples of non-interactive mode:
+
+The following command lists information about the specified PayID.
 
 ```
 payid load 'nhartner$xpring.money'
 ```
 
-Or to run multiple commands:
+You can run multiple commands chained together. This set of commands initializes a new or existing PayID, associates a specified crypto-address for the specified currency and network, and then saves the PayID with this information. 
 
 ```
 payid init 'my$pay.id' && payid crypto-address add btc mainnet notARealAddress && payid save
 ```
 
-_Note_: when passing a PayID as an argument in non-interactive mode, the PayID needs to be escaped or quoted  
+_Note_: when passing a PayID as an argument in non-interactive mode, the PayID must be escaped or quoted  
 to avoid the '\$' being interpolated as a variable by the shell.
 
 ## Commands
@@ -87,21 +90,21 @@ The following commands are available:
 
 ## Use Cases
 
-### Loading a PayID
+### Load a PayID
 
-The following command can be used to load an existing PayID from a remote server:
+Load an existing PayID from a remote server:
 
 ```
-load nhartner$xpring
+load nhartner$xpring.money
 ```
 
-This will fetch all the PayID address mappings for the given PayID from the remote
+This command fetches all the PayID address mappings for the given PayID from the remote
 server and displays the resulting JSON.
 
-### Creating a new PayID
+### Create a new PayID
 
 The following set of commands demonstrates how to create a new PayID, attach multiple
-address mappings and save the result to a JSON file.
+address mappings, and save the result to a JSON file.
 
 ```
 init example$mypayid.com
@@ -110,49 +113,49 @@ crypto-address add btc mainnet 3M2CH71P6uZTra1PsjiEhNFB7kCENShCgt
 save
 ```
 
-The end result should be a PayID json representation being saved to the local filesystem as
-example.json.
+The PayID JSON representation specified here is saved to the local filesystem as example.json.
 
 ### Identity Keys
 
 The PayID protocol supports signing address mappings using one or more cryptographic keys.
-The CLI provides several commands for generating and loading keys. Once a key is generated
-or loaded by the CLI, it is retained in the CLI's local storage for use in signing your PayID.
-Multiple identity keys can be generated or loaded using the `keys generate` and `keys load` commands.
-To remove all loaded keys from the CLI's local storage, use the `keys clear` command.
-The `keys list` command will show you all keys currently loaded into the CLI.
+PayID CLI provides several commands to generate and load keys. Once a key is generated
+or loaded by PayID CLI, it is retained in PayID CLI's local storage for use when you sign your PayID.
 
-To generate new key run:
+You can generate multiple identity keys by using the `keys generate` and `keys load` commands.
+
+To remove all loaded keys from the CLI's local storage, use the `keys clear` command.
+To see all keys currently loaded into PayID CLI, use the `keys list` command.
+
+To generate a new key run:
 
 ```
 keys generate
 ```
 
-This will generate a new key and save it to a file named `identity-key.pem`. To load a previously
+This generates a new key and saves it to a file named `identity-key.pem`. To load a previously
 created identity key, run `keys load </path/to/pem/file>`.
 
-### Signing a PayID
+### Sign a PayID
 
-In order to sign an PayID, it must either be loaded using the `load` command or created using the
-`init` command (as well as executing commands to add 1 or more addresses). Once a PayID has been
-initialized or loaded, it can be signed using an identity key (refer to the above section).
+Before you sign an PayID, you must either load the PayID using the `load` command, or create a PayID using the
+`init` command, and you must execute commands so that the PayID one or more crypto-addresses. 
 
-Once your PayID has been loaded or initialized, and your identity key has been generated or loaded,
-you can sign the PayID using the command `sign`. This command will signed each of your PayID address
-mappings using the loaded identity keys and out the resulting PayID with verifiedAddress. The `save`
-command can be used to save your PayID, with signed addresses, to file.
+Once a PayID has been initialized or loaded, you can sign it using an [identity key](#identity-keys). You must either generate a new key, or load an existing one. Once your PayID has been loaded or initialized, and your identity key has been generated or loaded,
+you can sign the PayID using `sign` command. The `sign` command signs each of your PayID address
+mappings using the loaded identity keys, and outputs the resulting PayID with a `verifiedAddress` field. Run the `save`
+command to save your PayID, with signed addresses, to file.
 
-### Inspecting a Verified PayID
+### Inspect a Verified PayID
 
 Two commands are available to verify a PayID's verified addresses.
 
 - `verify` - checks if all the verified addresses have valid signatures.
 - `inspect` - displays details information about each verified address and signatures.
 
-## Creating, Signing and Inspecting a PayID
+## Create, Sign, and Inspect a PayID
 
-Bringing all the above commands together, we can create a PayID, add an address mapping, generate an identity key,
-sign our PayID address mapping and then inspect the final result.
+With a combination of commands, you can create a PayID, add an address mapping, generate an identity key,
+sign your PayID address mapping, and then inspect the final result.
 
 ```
 init example$mypayid.com
