@@ -84,7 +84,7 @@ The following commands are available:
     verify [payId]                                                     Verifies the loaded PayID or an optionally specified PayID.
     save                                                               Saves the currently loaded PayID.
     from-url <url>                                                     Converts a URL to a PayID.
-    to-url <payId>                                                     Converts a PayID to a url.
+    to-url <payId>                                                     Converts a PayID to a URL.
 
 ```
 
@@ -152,7 +152,7 @@ Two commands are available to verify a PayID's verified addresses.
 - `verify` - checks if all the verified addresses have valid signatures.
 - `inspect` - displays details information about each verified address and signatures.
 
-## Create, Sign, and Inspect a PayID
+## Create, sign, and inspect a PayID
 
 With a combination of commands, you can create a PayID, add an address mapping, generate an identity key,
 sign your PayID address mapping, and then inspect the final result.
