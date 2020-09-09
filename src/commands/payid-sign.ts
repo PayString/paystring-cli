@@ -70,6 +70,12 @@ export default class SignPayIdCommand extends Command {
   }
 }
 
+/**
+ * Returns the default algorithm to use to sign with the given jwk.
+ *
+ * @param jwk - The key being used to sign.
+ * @returns The default algorithm.
+ */
 export function getDefaultAlgorithm(
   jwk: JWKRSAKey | JWKECKey | JWKOctKey | JWKOKPKey,
 ): string {
