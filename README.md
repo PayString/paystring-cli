@@ -35,14 +35,14 @@ You can run PayID CLI in either interactive mode or non-interactive (single comm
 In interactive mode, a prompt is displayed, and you can run multiple commands from this prompt. Run the `exit` command to leave interactive mode.
 
 Interactive mode retains a history of executed commands that you can access by with the up arrow key. Use the <Tab> key for command completion.
-    
+
 In non-interactive mode, you run a single command, based on supplied command line arguments, and then the CLI exits.
 No prompt is displayed in this mode. Non-interactive mode is useful for running commands from a script, or to chain the results
 of multiple commands together.
 
-To run the CLI in interactive mode, run `payid`. You can now enter `<command> arguments` for each command you want to run. 
+To run the CLI in interactive mode, run `payid`. You can now enter `<command> arguments` for each command you want to run.
 
-To run the CLI in non-interactive mode, run `payid <command> <arguments>`. 
+To run the CLI in non-interactive mode, run `payid <command> <arguments>`.
 
 Examples of non-interactive mode:
 
@@ -52,7 +52,7 @@ The following command lists information about the specified PayID.
 payid load 'nhartner$xpring.money'
 ```
 
-You can run multiple commands chained together. This set of commands initializes a new or existing PayID, associates a specified crypto-address for the specified currency and network, and then saves the PayID with this information. 
+You can run multiple commands chained together. This set of commands initializes a new or existing PayID, associates a specified crypto-address for the specified currency and network, and then saves the PayID with this information.
 
 ```
 payid init 'my$pay.id' && payid crypto-address add btc mainnet notARealAddress && payid save
@@ -138,7 +138,7 @@ created identity key, run `keys load </path/to/pem/file>`.
 ### Sign a PayID
 
 Before you sign an PayID, you must either load the PayID using the `load` command, or create a PayID using the
-`init` command, and you must execute commands so that the PayID one or more crypto-addresses. 
+`init` command, and you must execute commands so that the PayID one or more crypto-addresses.
 
 Once a PayID has been initialized or loaded, you can sign it using an [identity key](#identity-keys). You must either generate a new key, or load an existing one. Once your PayID has been loaded or initialized, and your identity key has been generated or loaded,
 you can sign the PayID using `sign` command. The `sign` command signs each of your PayID address
@@ -167,4 +167,4 @@ inspect
 
 ## Legal
 
-By using, reproducing, or distributing this code, you agree to the terms and conditions for use (including the Limitation of Liability) in the [Apache License 2.0](https://github.com/payid-org/payid-cli/blob/master/LICENSE). If you do not agree, you may not use, reproduce, or distribute the code. **This code is not authorised for download in Australia. Any persons located in Australia are expressly prohibited from downloading, using, reproducing or distributing the code.** This code is not owned by, or associated with, NPP Australia Limited, and has no sponsorship, affiliation or other connection with the “Pay ID” service operated by NPP Australia Limited in Australia.
+By using, reproducing, or distributing this code, you agree to the terms and conditions for use (including the Limitation of Liability) in the [Apache License 2.0](https://github.com/payid-org/payid-cli/blob/master/LICENSE). If you do not agree, you may not use, reproduce, or distribute the code. **This code is not authorised for download in Australia. Any persons located in Australia are expressly prohibited from downloading, using, reproducing or distributing the code.** This code is not owned by, or associated with, NPP Australia Limited, and has no sponsorship, affiliation or other connection with the "Pay ID" service operated by NPP Australia Limited in Australia.
