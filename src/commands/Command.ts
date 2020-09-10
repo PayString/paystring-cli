@@ -30,10 +30,15 @@ abstract class Command {
     this.vorpal = vorpal
   }
 
-  public setup(): void {
+  /**
+   * Sets up and registers the vorpal command.
+   *
+   * @returns The registered command.
+   */
+  public setup(): Vorpal.Command {
     // Register the concrete command to Vorpal.
     // Execute the concrete action inside a try/catch wrapper
-    this.vorpal.command(this.command(), this.description()).action(
+    return this.vorpal.command(this.command(), this.description()).action(
       async (args: Args): Promise<void> => {
         await this.action(args).catch((error) => {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- error has any type
