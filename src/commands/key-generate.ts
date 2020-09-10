@@ -12,7 +12,7 @@ export default class GenerateIdentityKeyCommand extends Command {
    * @override
    */
   protected async action(): Promise<void> {
-    const key = await JWK.generate('EC', 'secp256k1')
+    const key = await JWK.generate('EC', 'P-256')
     const pem = key.toPEM(true)
     try {
       const filename = await writeFile('./identity-key.pem', pem)

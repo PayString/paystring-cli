@@ -1,10 +1,10 @@
 import {
   convertToVerifiedAddress,
   signWithKeys,
-  getDefaultAlgorithm,
   IdentityKeySigningParams,
   toKey,
 } from '@payid-org/utils'
+import { JWKECKey, JWKOctKey, JWKOKPKey, JWKRSAKey } from 'jose'
 
 import Command from './Command'
 
@@ -68,4 +68,25 @@ export default class SignPayIdCommand extends Command {
         new IdentityKeySigningParams(toKey(key), getDefaultAlgorithm(key)),
     )
   }
+}
+
+/**
+ * Returns the default algorithm to use to sign with the given jwk.
+ *
+ * @param jwk - The key being used to sign.
+ * @returns The default algorithm.
+ */
+export function getDefaultAlgorithm(
+  jwk: JWKRSAKey | JWKECKey | JWKOctKey | JWKOKPKey,
+): string {
+  if (jwk.kty === 'EC') {
+    return 'ES256'
+  }
+  if (jwk.kty === 'oct') {
+    return 'HS512'
+  }
+  if (jwk.kty === 'OKP') {
+    return 'EdDSA'
+  }
+  return 'RS512'
 }
