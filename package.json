@@ -1,6 +1,6 @@
 {
   "name": "@payid-org/payid-cli",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "CLI for PayID",
   "homepage": "https://github.com/payid-org/payid-cli#readme",
   "bugs": {
