@@ -142,8 +142,12 @@ Before you sign an PayID, you must either load the PayID using the `load` comman
 
 Once a PayID has been initialized or loaded, you can sign it using an [identity key](#identity-keys). You must either generate a new key, or load an existing one. Once your PayID has been loaded or initialized, and your identity key has been generated or loaded,
 you can sign the PayID using `sign` command. The `sign` command signs each of your PayID address
-mappings using the loaded identity keys, and outputs the resulting PayID with a `verifiedAddress` field. Run the `save`
-command to save your PayID, with signed addresses, to file.
+mappings using the loaded identity keys, and outputs the resulting PayID with a `verifiedAddress` field.
+
+By default, the sign command clears the unsigned `addresses` from the results. If you wish to
+retain unsigned addresses after signing, use `sign --keep-addresses` or `sign -k` instead.
+
+Finally, run the `save` command to save your PayID, with signed addresses, to file.
 
 ### Inspect a Verified PayID
 

@@ -3,8 +3,10 @@ import {
   signWithKeys,
   IdentityKeySigningParams,
   toKey,
+  PaymentInformation,
 } from '@payid-org/utils'
 import { JWKECKey, JWKOctKey, JWKOKPKey, JWKRSAKey } from 'jose'
+import * as Vorpal from 'vorpal'
 
 import Command from './Command'
 
@@ -12,7 +14,24 @@ import Command from './Command'
  * Signs the currently loaded PayID PaymentInformation using the loaded signings keys.
  */
 export default class SignPayIdCommand extends Command {
-  protected async action(): Promise<void> {
+  /**
+   * @override
+   */
+  public setup(): Vorpal.Command {
+    return super
+      .setup()
+      .option(
+        '-k, --keep-addresses',
+        'Keep the unverified addresses section after signing.',
+      )
+  }
+
+  /**
+   * @override
+   */
+  protected async action(args: Vorpal.Args): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Vorpal.options isn't typed
+    const isKeepAddresses: boolean = args.options['keep-addresses'] ?? false
     const info = this.getPaymentInfo()
     const payId = info.payId
     if (!payId) {
@@ -28,15 +47,7 @@ export default class SignPayIdCommand extends Command {
       return
     }
 
-    const updatedAddresses = info.addresses.map((address) => {
-      const jws = signWithKeys(payId, address, signingKeys)
-      return convertToVerifiedAddress(jws)
-    })
-    const updated = {
-      payId: info.payId,
-      addresses: info.addresses,
-      verifiedAddresses: updatedAddresses,
-    }
+    const updated = signPayId(info, signingKeys, isKeepAddresses)
 
     this.localStorage.setPaymentInfo(updated)
     this.logPaymentInfo(updated)
@@ -68,6 +79,33 @@ export default class SignPayIdCommand extends Command {
         new IdentityKeySigningParams(toKey(key), getDefaultAlgorithm(key)),
     )
   }
+}
+
+/**
+ * Signs all the addresses for the given payment information and returns
+ * with verified address.
+ *
+ * @param info - The payment information to sign.
+ * @param signingKeys - The keys to sign with.
+ * @param isKeepAddresses - If true, the unverified addresses property will be retained instead of cleared.
+ * @returns A copy of the PaymentInformation but with verified addresses.
+ */
+export function signPayId(
+  info: PaymentInformation,
+  signingKeys: IdentityKeySigningParams[],
+  isKeepAddresses: boolean,
+): PaymentInformation {
+  const payId = info.payId
+  const updatedAddresses = info.addresses.map((address) => {
+    const jws = signWithKeys(payId, address, signingKeys)
+    return convertToVerifiedAddress(jws)
+  })
+  const updated = {
+    payId: info.payId,
+    addresses: isKeepAddresses ? info.addresses : [],
+    verifiedAddresses: updatedAddresses,
+  }
+  return updated
 }
 
 /**
