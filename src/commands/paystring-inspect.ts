@@ -1,17 +1,17 @@
 import {
   PaymentInformationInspector,
   SignatureInspectionResult,
-} from '@payid-org/utils'
+} from '@paystring/utils'
 import * as Vorpal from 'vorpal'
 
 import Command from './Command'
 import LocalStorage from './localstorage'
 
 /**
- * Inspects the currently loaded PayID and prints inspection details to the console.
+ * Inspects the currently loaded PayString and prints inspection details to the console.
  * Inspection looks at verified addresses and verifies the signatures and certificate chain (if present).
  */
-export default class InspectPayIdCommand extends Command {
+export default class InspectPayStringCommand extends Command {
   private readonly paymentInformationInspector: PaymentInformationInspector
 
   /**
@@ -29,21 +29,21 @@ export default class InspectPayIdCommand extends Command {
    * @override
    */
   protected command(): string {
-    return 'inspect [payId]'
+    return 'inspect [payString]'
   }
 
   /**
    * @override
    */
   protected description(): string {
-    return 'Inspect signatures on the loaded PayID or from an optionally specified PayID'
+    return 'Inspect signatures on the loaded PayString or from an optionally specified PayString'
   }
 
   /**
    * @override
    */
   protected async action(args: Vorpal.Args): Promise<void> {
-    const info = await this.payIdFromArgsOrLocalStorage(args)
+    const info = await this.payStringFromArgsOrLocalStorage(args)
     const result = this.paymentInformationInspector.inspect(info)
     this.vorpal.log(`${info.payId} ${validString(result.isVerified)}`)
     result.verifiedAddressesResults.forEach((addressResult) => {

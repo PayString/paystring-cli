@@ -1,9 +1,9 @@
 import Command from './Command'
 
 /**
- * Prints the currently loaded PayID PaymentInformation to the console.
+ * Prints the currently loaded PayString PaymentInformation to the console.
  */
-export default class ShowPayIdCommand extends Command {
+export default class ShowPayStringCommand extends Command {
   protected async action(): Promise<void> {
     const info = this.getPaymentInfo()
     this.logPaymentInfo(info)
@@ -20,6 +20,6 @@ export default class ShowPayIdCommand extends Command {
    * @override
    */
   protected description(): string {
-    return 'Shows the currently loaded PayID'
+    return 'Shows the currently loaded PayString'
   }
 }

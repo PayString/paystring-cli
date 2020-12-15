@@ -1,10 +1,10 @@
-import { PaymentInformation } from '@payid-org/utils'
+import { PaymentInformation } from '@paystring/utils'
 import { JWKECKey, JWKOctKey, JWKOKPKey, JWKRSAKey } from 'jose'
 import * as Vorpal from 'vorpal'
 
 /**
  * Facade layer for the Vorpal localstorage object. Provides typed methods for accessing things in
- * local storage like signing keys and PayID PaymentInformation. Objects in local storage are
+ * local storage like signing keys and PayString PaymentInformation. Objects in local storage are
  * stored as JSON strings.
  */
 export default class LocalStorage {
@@ -13,12 +13,12 @@ export default class LocalStorage {
   /**
    * Constructs the facade and initializes the localstorage instance.
    *
-   * @param id - The id for this local storage.
+   * @param payString - The payString for this local storage.
    * @param vorpal - The vorpal instance to use.
    */
-  public constructor(id: string, vorpal: Vorpal) {
+  public constructor(payString: string, vorpal: Vorpal) {
     // initializes the local storage instance
-    vorpal.localStorage(id)
+    vorpal.localStorage(payString)
     // The Vorpal API for local storage is really poorly defined and the type defs do not match the actual API.
     // see https://github.com/dthree/vorpal/wiki/API-%7C-vorpal#vorpallocalstorageid
     // So many things that make typescript linter upset that it's easiest to just disable all rules for this one line.
@@ -35,7 +35,7 @@ export default class LocalStorage {
    * @returns The instance or undefined if none exists.
    */
   public getPaymentInfo(): PaymentInformation | undefined {
-    return this.getItem('payid') as PaymentInformation
+    return this.getItem('paystring') as PaymentInformation
   }
 
   /**
@@ -44,7 +44,7 @@ export default class LocalStorage {
    * @param info - The value to store.
    */
   public setPaymentInfo(info: PaymentInformation): void {
-    this.setItem('payid', JSON.stringify(info))
+    this.setItem('paystring', JSON.stringify(info))
   }
 
   /**

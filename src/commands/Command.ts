@@ -1,4 +1,4 @@
-import { convertPayIdToUrl, PaymentInformation } from '@payid-org/utils'
+import { convertPayStringToUrl, PaymentInformation } from '@paystring/utils'
 import axios, { AxiosResponse } from 'axios'
 import * as Vorpal from 'vorpal'
 import { Args } from 'vorpal'
@@ -76,18 +76,18 @@ abstract class Command {
   }
 
   /**
-   * Retrieves a PayID using the optional payId argument or else returns the PaymentInformation
+   * Retrieves a PayString using the optional payString argument or else returns the PaymentInformation
    * currently loaded in local storage.
    *
    * @param args - The vorpal args object.
    * @returns PaymentInformation from args or local storage. Or error if can't be loaded.
    */
-  protected async payIdFromArgsOrLocalStorage(
+  protected async payStringFromArgsOrLocalStorage(
     args: Args,
   ): Promise<PaymentInformation> {
-    const { payId } = args
-    if (payId) {
-      return loadPayId(payId)
+    const { payId: payString } = args
+    if (payString) {
+      return loadPayString(payString)
     }
     return this.getPaymentInfo()
   }
@@ -117,11 +117,13 @@ abstract class Command {
 /**
  * Loads a PayID from a remote server.
  *
- * @param payId - The PayID to lookup.
+ * @param payString - The PayID to lookup.
  * @returns A promise that resolves to the PaymentInformation for the PayID.
  */
-export async function loadPayId(payId: string): Promise<PaymentInformation> {
-  const url = convertPayIdToUrl(payId).href
+export async function loadPayString(
+  payString: string,
+): Promise<PaymentInformation> {
+  const url = convertPayStringToUrl(payString).href
   return axios
     .get(url, {
       headers: {
