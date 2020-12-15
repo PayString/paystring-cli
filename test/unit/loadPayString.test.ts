@@ -1,20 +1,22 @@
 import 'mocha'
 import { assert } from 'chai'
 
-import { loadPayId } from '../../src/commands/Command'
+import { loadPayString } from '../../src/commands/Command'
 
-describe('loadPayId()', function (): void {
-  it('Returns a PaymentInformation given a valid PayID', async function (): Promise<
+describe('loadPayString()', function (): void {
+  it('Returns a PaymentInformation given a valid PayString', async function (): Promise<
     void
   > {
-    const info = await loadPayId('nhartner$xpring.money')
+    const info = await loadPayString('nhartner$xpring.money')
     assert.equal(info.payId, 'nhartner$xpring.money')
     assert.isTrue(info.addresses.length > 0)
   })
 
-  it('Gives error when PayID returns 404', async function (): Promise<void> {
+  it('Gives error when PayString returns 404', async function (): Promise<
+    void
+  > {
     try {
-      await loadPayId('bogusaccount$xpring.money')
+      await loadPayString('bogusaccount$xpring.money')
       assert.fail('expected error')
     } catch (error) {
       assert.deepEqual(

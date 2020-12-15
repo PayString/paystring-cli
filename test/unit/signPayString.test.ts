@@ -3,11 +3,11 @@ import {
   AddressDetailsType,
   IdentityKeySigningParams,
   PaymentInformation,
-} from '@payid-org/utils'
+} from '@paystring/utils'
 import { assert } from 'chai'
 import { JWK } from 'jose'
 
-import { signPayId } from '../../src/commands/payid-sign'
+import { signPayString } from '../../src/commands/paystring-sign'
 
 const info: PaymentInformation = {
   payId: 'boaty$mcboatface.com',
@@ -24,7 +24,7 @@ const info: PaymentInformation = {
   verifiedAddresses: [],
 }
 
-describe('when signPayId()', function (): void {
+describe('when signPayString()', function (): void {
   let signingKey: IdentityKeySigningParams
 
   beforeEach('create key', async function (): Promise<void> {
@@ -35,7 +35,7 @@ describe('when signPayId()', function (): void {
   it('called with keepAddresses=true, then addresses property is retained', async function (): Promise<
     void
   > {
-    const result = signPayId(info, [signingKey], true)
+    const result = signPayString(info, [signingKey], true)
     assert.equal(result.addresses, info.addresses)
     assert.lengthOf(result.verifiedAddresses, 1)
   })
@@ -43,7 +43,7 @@ describe('when signPayId()', function (): void {
   it('called with keepAddresses=false, then addresses property is cleared', async function (): Promise<
     void
   > {
-    const result = signPayId(info, [signingKey], false)
+    const result = signPayString(info, [signingKey], false)
     assert.isEmpty(result.addresses)
     assert.lengthOf(result.verifiedAddresses, 1)
   })

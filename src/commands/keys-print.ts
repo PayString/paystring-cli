@@ -1,4 +1,4 @@
-import { toKey } from '@payid-org/utils'
+import { toKey } from '@paystring/utils'
 
 import Command from './Command'
 

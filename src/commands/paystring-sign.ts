@@ -1,19 +1,19 @@
 import {
   convertToVerifiedAddress,
-  signWithKeys,
   IdentityKeySigningParams,
-  toKey,
   PaymentInformation,
-} from '@payid-org/utils'
+  signWithKeys,
+  toKey,
+} from '@paystring/utils'
 import { JWKECKey, JWKOctKey, JWKOKPKey, JWKRSAKey } from 'jose'
 import * as Vorpal from 'vorpal'
 
 import Command from './Command'
 
 /**
- * Signs the currently loaded PayID PaymentInformation using the loaded signings keys.
+ * Signs the currently loaded PayString PaymentInformation using the loaded signings keys.
  */
-export default class SignPayIdCommand extends Command {
+export default class SignPayStringCommand extends Command {
   /**
    * @override
    */
@@ -47,7 +47,7 @@ export default class SignPayIdCommand extends Command {
       return
     }
 
-    const updated = signPayId(info, signingKeys, isKeepAddresses)
+    const updated = signPayString(info, signingKeys, isKeepAddresses)
 
     this.localStorage.setPaymentInfo(updated)
     this.logPaymentInfo(updated)
@@ -64,7 +64,7 @@ export default class SignPayIdCommand extends Command {
    * @override
    */
   protected description(): string {
-    return 'sign the loaded PayID with the loaded signing keys'
+    return 'sign the loaded PayString with the loaded signing keys'
   }
 
   /**
@@ -90,7 +90,7 @@ export default class SignPayIdCommand extends Command {
  * @param isKeepAddresses - If true, the unverified addresses property will be retained instead of cleared.
  * @returns A copy of the PaymentInformation but with verified addresses.
  */
-export function signPayId(
+export function signPayString(
   info: PaymentInformation,
   signingKeys: IdentityKeySigningParams[],
   isKeepAddresses: boolean,

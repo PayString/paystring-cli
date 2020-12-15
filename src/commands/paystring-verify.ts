@@ -1,22 +1,22 @@
 import {
   convertJsonToAddress,
   PaymentInformation,
-  verifyPayId,
-} from '@payid-org/utils'
+  verifyPayString,
+} from '@paystring/utils'
 import * as Vorpal from 'vorpal'
 
 import Command from './Command'
 
 /**
- * Verifies the signatures and certs for verified addresses of the currently loaded PayID.
+ * Verifies the signatures and certs for verified addresses of the currently loaded PayString.
  */
-export default class VerifyPayIdCommand extends Command {
+export default class VerifyPayStringCommand extends Command {
   /**
    * @override
    */
   protected async action(args: Vorpal.Args): Promise<void> {
-    const info = await this.payIdFromArgsOrLocalStorage(args)
-    if (verifyPayId(info)) {
+    const info = await this.payStringFromArgsOrLocalStorage(args)
+    if (verifyPayString(info)) {
       const addresses = info.verifiedAddresses.map((address) => {
         return convertJsonToAddress(address.payload)
       })
@@ -36,13 +36,13 @@ export default class VerifyPayIdCommand extends Command {
    * @override
    */
   protected command(): string {
-    return 'verify [payId]'
+    return 'verify [payString]'
   }
 
   /**
    * @override
    */
   protected description(): string {
-    return 'Verify the loaded PayID or an optionally specified PayID'
+    return 'Verify the loaded PayString or an optionally specified PayString'
   }
 }

@@ -1,4 +1,4 @@
-import { getSigningKeyFromFile } from '@payid-org/utils'
+import { getSigningKeyFromFile } from '@paystring/utils'
 import * as Vorpal from 'vorpal'
 
 import Command from './Command'

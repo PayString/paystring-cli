@@ -2,7 +2,7 @@ import 'mocha'
 import { assert } from 'chai'
 import { JWK } from 'jose'
 
-import { getDefaultAlgorithm } from '../../src/commands/payid-sign'
+import { getDefaultAlgorithm } from '../../src/commands/paystring-sign'
 
 describe('when getDefaultAlgorithm()', function (): void {
   it('given an EC key then returns ES256', async function (): Promise<void> {

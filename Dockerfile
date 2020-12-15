@@ -1,8 +1,8 @@
 FROM node:12-alpine
 
-ADD . / payid-cli/
+ADD . / paystring-cli/
 
-RUN cd payid-cli/ &&\
+RUN cd paystring-cli/ &&\
     npm set unsafe-perm true &&\
     npm cache clean --force &&\
     npm install &&\
@@ -11,11 +11,11 @@ RUN cd payid-cli/ &&\
 
 FROM node:12-alpine
 
-RUN mkdir /opt/payid-cli
+RUN mkdir /opt/paystring-cli
 
-WORKDIR /opt/payid-cli
+WORKDIR /opt/paystring-cli
 
-COPY --from=0 /payid-cli/dist  /opt/payid-cli/dist
-COPY --from=0 /payid-cli/node_modules  /opt/payid-cli/node_modules
+COPY --from=0 /paystring-cli/dist  /opt/paystring-cli/dist
+COPY --from=0 /paystring-cli/node_modules  /opt/paystring-cli/node_modules
 
-ENTRYPOINT ["node", "/opt/payid-cli/dist/cli.js"]
+ENTRYPOINT ["node", "/opt/paystring-cli/dist/cli.js"]

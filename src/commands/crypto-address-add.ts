@@ -1,4 +1,4 @@
-import { Address, AddressDetailsType } from '@payid-org/utils'
+import { Address, AddressDetailsType } from '@paystring/utils'
 import * as Vorpal from 'vorpal'
 
 import Command from './Command'
