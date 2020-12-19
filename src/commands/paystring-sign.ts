@@ -1,11 +1,9 @@
 import {
-  convertToVerifiedAddress,
+  getDefaultAlgorithm,
   IdentityKeySigningParams,
   PaymentInformation,
   signWithKeys,
-  toKey,
 } from '@paystring/utils'
-import { JWKECKey, JWKOctKey, JWKOKPKey, JWKRSAKey } from 'jose'
 import * as Vorpal from 'vorpal'
 
 import Command from './Command'
@@ -47,7 +45,7 @@ export default class SignPayStringCommand extends Command {
       return
     }
 
-    const updated = signPayString(info, signingKeys, isKeepAddresses)
+    const updated = await signPayString(info, signingKeys, isKeepAddresses)
 
     this.localStorage.setPaymentInfo(updated)
     this.logPaymentInfo(updated)
@@ -75,8 +73,7 @@ export default class SignPayStringCommand extends Command {
   private getSigningKey(): IdentityKeySigningParams[] {
     const identityKeys = this.localStorage.getSigningKeys('identity-keys')
     return identityKeys.map(
-      (key) =>
-        new IdentityKeySigningParams(toKey(key), getDefaultAlgorithm(key)),
+      (key) => new IdentityKeySigningParams(key, getDefaultAlgorithm(key)),
     )
   }
 }
@@ -90,41 +87,21 @@ export default class SignPayStringCommand extends Command {
  * @param isKeepAddresses - If true, the unverified addresses property will be retained instead of cleared.
  * @returns A copy of the PaymentInformation but with verified addresses.
  */
-export function signPayString(
+export async function signPayString(
   info: PaymentInformation,
   signingKeys: IdentityKeySigningParams[],
   isKeepAddresses: boolean,
-): PaymentInformation {
+): Promise<PaymentInformation> {
   const payId = info.payId
-  const updatedAddresses = info.addresses.map((address) => {
-    const jws = signWithKeys(payId, address, signingKeys)
-    return convertToVerifiedAddress(jws)
-  })
+  const updatedAddresses = await Promise.all(
+    info.addresses.map(async (address) =>
+      signWithKeys(payId, address, signingKeys),
+    ),
+  )
   const updated = {
     payId: info.payId,
     addresses: isKeepAddresses ? info.addresses : [],
     verifiedAddresses: updatedAddresses,
   }
   return updated
-}
-
-/**
- * Returns the default algorithm to use to sign with the given jwk.
- *
- * @param jwk - The key being used to sign.
- * @returns The default algorithm.
- */
-export function getDefaultAlgorithm(
-  jwk: JWKRSAKey | JWKECKey | JWKOctKey | JWKOKPKey,
-): string {
-  if (jwk.kty === 'EC') {
-    return 'ES256'
-  }
-  if (jwk.kty === 'oct') {
-    return 'HS512'
-  }
-  if (jwk.kty === 'OKP') {
-    return 'EdDSA'
-  }
-  return 'RS512'
 }

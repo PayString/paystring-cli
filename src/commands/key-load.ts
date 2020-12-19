@@ -1,7 +1,7 @@
-import { getSigningKeyFromFile } from '@paystring/utils'
 import * as Vorpal from 'vorpal'
 
 import Command from './Command'
+import { getSigningKeyFromFile } from './pem-utils'
 
 /**
  * Loads an identity key from a PEM file.
@@ -17,7 +17,7 @@ export default class LoadIdentityKeyCommand extends Command {
     this.vorpal.log(`loading identity-key from ${filePath}`)
     const key = await getSigningKeyFromFile(filePath)
     this.vorpal.log(`loaded identity-key from ${filePath}. Sign away.`)
-    this.localStorage.addSigningKey('identity-keys', key.toJWK(true))
+    this.localStorage.addSigningKey('identity-keys', key)
   }
 
   /**

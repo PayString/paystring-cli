@@ -1,6 +1,5 @@
-import { toKey } from '@paystring/utils'
-
 import Command from './Command'
+import { jwkToPem } from './pem-utils'
 
 /**
  * Prints, to console, a summary of the identity and server keys that are currently loaded in
@@ -36,7 +35,7 @@ export default class PrintKeysCommand extends Command {
   private printKeys(name: string): void {
     const keys = this.localStorage.getSigningKeys(name)
     keys.forEach((key) => {
-      const pem = toKey(key).toPEM(true)
+      const pem = jwkToPem(key)
       this.vorpal.log(pem)
     })
   }
