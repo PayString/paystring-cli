@@ -1,6 +1,6 @@
 {
   "name": "@paystring/paystring-cli",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "CLI for PayString",
   "homepage": "https://github.com/paystring/paystring-cli#readme",
   "bugs": {
@@ -28,11 +28,11 @@
     "test": "nyc mocha 'test/**/*.test.ts'"
   },
   "dependencies": {
-    "@paystring/utils": "^1.3.0",
+    "@paystring/utils": "^2.0.0",
     "axios": "^0.19.2",
     "beautify-json": "^1.0.1",
-    "jose": "^1.27.3",
-    "node-forge": "^0.10.0",
+    "ec-key": "0.0.4",
+    "jose": "^3.5.0",
     "vorpal": "^1.12.0"
   },
   "devDependencies": {

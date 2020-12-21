@@ -1,5 +1,5 @@
 import { PaymentInformation } from '@paystring/utils'
-import { JWKECKey, JWKOctKey, JWKOKPKey, JWKRSAKey } from 'jose'
+import { JWK } from 'jose/webcrypto/types'
 import * as Vorpal from 'vorpal'
 
 /**
@@ -53,12 +53,10 @@ export default class LocalStorage {
    * @param name - The name of the key.
    * @returns The key or null.
    */
-  public getSigningKeys(
-    name: string,
-  ): Array<JWKRSAKey | JWKECKey | JWKOKPKey | JWKOctKey> {
+  public getSigningKeys(name: string): JWK[] {
     const existing = this.getItem(name)
     if (existing) {
-      return existing as Array<JWKRSAKey | JWKECKey | JWKOKPKey | JWKOctKey>
+      return existing as JWK[]
     }
     return []
   }
@@ -70,10 +68,7 @@ export default class LocalStorage {
    * @param name - The name of the key.
    * @param key - The key to store.
    */
-  public addSigningKey(
-    name: string,
-    key: JWKRSAKey | JWKECKey | JWKOKPKey | JWKOctKey,
-  ): void {
+  public addSigningKey(name: string, key: JWK): void {
     const keys = this.getSigningKeys(name)
     const updated = keys.concat(key)
     this.setItem(name, JSON.stringify(updated))
@@ -94,12 +89,7 @@ export default class LocalStorage {
    * @param name - The name of the item to get.
    * @returns The object or undefined if not in localstore.
    */
-  private getItem(
-    name: string,
-  ):
-    | Array<JWKRSAKey | JWKECKey | JWKOKPKey | JWKOctKey>
-    | PaymentInformation
-    | undefined {
+  private getItem(name: string): JWK[] | PaymentInformation | undefined {
     const rawValue = this.localStorage.getItem(name)
     if (rawValue && typeof rawValue === 'string') {
       try {

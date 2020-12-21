@@ -26,7 +26,19 @@ module.exports = {
     '@xpring-eng/eslint-config-base',
   ],
 
-  rules: {},
+  rules: {
+    // linter doesn't seem to understand ESM imports used by jose, even though typescript handles them just fine.
+    "node/no-missing-import": ["error", {
+      allowModules: ["jose"],
+    }],
+    "import/no-unresolved": [
+      2,
+      {
+        ignore: [
+          'jose'
+        ]
+      }],
+  },
   overrides: [
     {
       "files": ["*cli.ts"],

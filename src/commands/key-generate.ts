@@ -1,7 +1,8 @@
-import { JWK } from 'jose'
+import { generateNewKey } from '@paystring/utils'
 
 import Command from './Command'
 import { writeFile } from './files'
+import { jwkToPem } from './pem-utils'
 
 /**
  * Generates an identity key, loads the key into local storage and saves the key
@@ -12,8 +13,8 @@ export default class GenerateIdentityKeyCommand extends Command {
    * @override
    */
   protected async action(): Promise<void> {
-    const key = await JWK.generate('EC', 'P-256')
-    const pem = key.toPEM(true)
+    const key = await generateNewKey()
+    const pem = jwkToPem(key)
     try {
       const filename = await writeFile('./identity-key.pem', pem)
       this.vorpal.log(`wrote key to ${filename}`)
@@ -21,7 +22,7 @@ export default class GenerateIdentityKeyCommand extends Command {
       this.vorpal.log('failed to write key, outputting instead')
       this.vorpal.log(pem)
     }
-    this.localStorage.addSigningKey('identity-keys', key.toJWK(true))
+    this.localStorage.addSigningKey('identity-keys', key)
   }
 
   /**

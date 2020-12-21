@@ -16,7 +16,7 @@ export default class VerifyPayStringCommand extends Command {
    */
   protected async action(args: Vorpal.Args): Promise<void> {
     const info = await this.payStringFromArgsOrLocalStorage(args)
-    if (verifyPayString(info)) {
+    if (await verifyPayString(info)) {
       const addresses = info.verifiedAddresses.map((address) => {
         return convertJsonToAddress(address.payload)
       })

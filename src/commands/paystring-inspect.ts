@@ -44,7 +44,7 @@ export default class InspectPayStringCommand extends Command {
    */
   protected async action(args: Vorpal.Args): Promise<void> {
     const info = await this.payStringFromArgsOrLocalStorage(args)
-    const result = this.paymentInformationInspector.inspect(info)
+    const result = await this.paymentInformationInspector.inspect(info)
     this.vorpal.log(`${info.payId} ${validString(result.isVerified)}`)
     result.verifiedAddressesResults.forEach((addressResult) => {
       const address = addressResult.address
@@ -83,9 +83,10 @@ export default class InspectPayStringCommand extends Command {
       )}`,
     )
     if (signatureResult.jwk && signatureResult.keyType) {
-      const thumbprint = signatureResult.jwk.thumbprint
+      const thumbprint = signatureResult.jwk.kid ?? 'not set'
+      const kty = signatureResult.jwk.kty ?? 'no key type'
       this.vorpal.log(
-        `  - Signed with ${signatureResult.jwk.kty} ${signatureResult.keyType} with thumbprint ${thumbprint}`,
+        `  - Signed with ${kty} ${signatureResult.keyType} with thumbprint ${thumbprint}`,
       )
     }
   }

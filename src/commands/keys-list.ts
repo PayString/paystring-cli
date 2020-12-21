@@ -35,10 +35,11 @@ export default class ListKeysCommand extends Command {
     const keys = this.localStorage.getSigningKeys(name)
     keys.forEach((key) => {
       const kid = key.kid ?? 'not set'
-      if ('crv' in key) {
-        this.vorpal.log(`${name}: type=${key.kty}, type=${key.crv}, id=${kid}`)
+      const kty = key.kty ?? 'not set'
+      if (typeof key.crv === 'string') {
+        this.vorpal.log(`${name}: type=${kty}, type=${key.crv}, id=${kid}`)
       } else {
-        this.vorpal.log(`${name}: type=${key.kty}, id=${kid}`)
+        this.vorpal.log(`${name}: type=${kty}, id=${kid}`)
       }
     })
   }
